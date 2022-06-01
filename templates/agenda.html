@@ -1,6 +1,10 @@
 {% extends "model-page.html" %}
     {% block content %}
+
         <h2>Horários</h2>
+        <a href="/agenda/evento">
+        <button>Novo evento</button>
+        </a>
 
         <ul style="font-size: 20px;">
             {% for evento in eventos %}
