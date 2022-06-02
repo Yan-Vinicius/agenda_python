@@ -3,7 +3,8 @@ from core.models import Evento
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
+from datetime import datetime
+from django.http.response import Http404
 
 # Create your views here.
 # def index(request):
@@ -41,6 +42,7 @@ def logout_user(request):
 def lista_eventos(request):
 
     usuario = request.user
+    data_atual = datetime.now()
     evento = Evento.objects.filter(usuario=usuario)
     data = {'eventos': evento}
     return render(request, 'agenda.html', data)
@@ -78,7 +80,11 @@ def submit_evento(request):
 @login_required(login_url='/login/')
 def delete_evento(request, id_evento):
     usuario = request.user
-    evento = Evento.objects.get(id=id_evento)
+    try:
+        evento = Evento.objects.get(id=id_evento)
+
+    except Exception:
+        raise Http404()
 
     if usuario == evento.usuario:
         evento.delete()
